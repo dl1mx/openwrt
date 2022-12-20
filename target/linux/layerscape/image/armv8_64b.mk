@@ -8,8 +8,7 @@ define Device/Default
   FILESYSTEMS := squashfs
   KERNEL := kernel-bin | gzip | uImage gzip
   KERNEL_INITRAMFS = kernel-bin | gzip | fit gzip $$(DTS_DIR)/$$(DEVICE_DTS).dtb
-  KERNEL_LOADADDR := 0x80080000
-  KERNEL_ENTRY_POINT := 0x80080000
+  KERNEL_LOADADDR := 0x80000000
   DEVICE_DTS = freescale/$(subst _,-,$(1))
   IMAGE_SIZE := 64m
   IMAGE/sysupgrade.bin = \
@@ -47,7 +46,6 @@ define Device/fsl_ls1012a-frdm
     append-rootfs | pad-rootfs | \
     check-size $(LS_SYSUPGRADE_IMAGE_SIZE) | append-metadata
   KERNEL := kernel-bin | gzip | fit gzip $$(DTS_DIR)/$$(DEVICE_DTS).dtb
-  KERNEL_INITRAMFS := kernel-bin | fit none $$(DTS_DIR)/$$(DEVICE_DTS).dtb
 endef
 TARGET_DEVICES += fsl_ls1012a-frdm
 
@@ -112,7 +110,7 @@ define Device/fsl_ls1043a-rdb
     kmod-ahci-qoriq \
     kmod-hwmon-ina2xx \
     kmod-hwmon-lm90
-  DEVICE_DTS := freescale/fsl-ls1043a-rdb-sdk
+  DEVICE_DTS := freescale/fsl-ls1043a-rdb
   IMAGE/firmware.bin := \
     ls-clean | \
     ls-append $(1)-bl2.pbl | pad-to 1M | \
@@ -138,7 +136,7 @@ define Device/fsl_ls1043a-rdb-sdboot
     kmod-ahci-qoriq \
     kmod-hwmon-ina2xx \
     kmod-hwmon-lm90
-  DEVICE_DTS := freescale/fsl-ls1043a-rdb-sdk
+  DEVICE_DTS := freescale/fsl-ls1043a-rdb
   IMAGE/sdcard.img.gz := \
     ls-clean | \
     ls-append-sdhead $(1) | pad-to 4K | \
@@ -158,7 +156,7 @@ define Device/fsl_ls1046a-frwy
   DEVICE_PACKAGES += \
     layerscape-fman \
     tfa-ls1046a-frwy
-  DEVICE_DTS := freescale/fsl-ls1046a-frwy-sdk
+  DEVICE_DTS := freescale/fsl-ls1046a-frwy
   IMAGE/firmware.bin := \
     ls-clean | \
     ls-append $(1)-bl2.pbl | pad-to 1M | \
@@ -179,7 +177,7 @@ define Device/fsl_ls1046a-frwy-sdboot
   DEVICE_PACKAGES += \
     layerscape-fman \
     tfa-ls1046a-frwy-sdboot
-  DEVICE_DTS := freescale/fsl-ls1046a-frwy-sdk
+  DEVICE_DTS := freescale/fsl-ls1046a-frwy
   IMAGE/sdcard.img.gz := \
     ls-clean | \
     ls-append-sdhead $(1) | pad-to 4K | \
@@ -204,7 +202,7 @@ define Device/fsl_ls1046a-rdb
     kmod-ahci-qoriq \
     kmod-hwmon-ina2xx \
     kmod-hwmon-lm90
-  DEVICE_DTS := freescale/fsl-ls1046a-rdb-sdk
+  DEVICE_DTS := freescale/fsl-ls1046a-rdb
   IMAGE/firmware.bin := \
     ls-clean | \
     ls-append $(1)-bl2.pbl | pad-to 1M | \
@@ -230,7 +228,7 @@ define Device/fsl_ls1046a-rdb-sdboot
     kmod-ahci-qoriq \
     kmod-hwmon-ina2xx \
     kmod-hwmon-lm90
-  DEVICE_DTS := freescale/fsl-ls1046a-rdb-sdk
+  DEVICE_DTS := freescale/fsl-ls1046a-rdb
   IMAGE/sdcard.img.gz := \
     ls-clean | \
     ls-append-sdhead $(1) | pad-to 4K | \
@@ -397,8 +395,8 @@ define Device/traverse_ls1043
   DEVICE_DTS = freescale/traverse-ls1043s
   DEVICE_DTS_DIR = $(LINUX_DIR)/arch/arm64/boot/dts
   DEVICE_DTS_CONFIG = ls1043s
-  KERNEL := kernel-bin | gzip | traverse-fit gzip $$(DTS_DIR)/$$(DEVICE_DTS).dtb $$(FDT_LOADADDR)
-  KERNEL_INITRAMFS := kernel-bin | gzip | fit gzip $$(DTS_DIR)/$$(DEVICE_DTS).dtb $$(FDT_LOADADDR)
+  KERNEL := kernel-bin | gzip | traverse-fit gzip $$(DTS_DIR)/$$(DEVICE_DTS).dtb
+  KERNEL_INITRAMFS := kernel-bin | gzip | fit gzip $$(DTS_DIR)/$$(DEVICE_DTS).dtb
   IMAGES = root sysupgrade.bin
   IMAGE/root = append-rootfs
   IMAGE/sysupgrade.bin = sysupgrade-tar | append-metadata

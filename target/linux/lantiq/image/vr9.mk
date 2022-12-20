@@ -197,14 +197,15 @@ define Device/avm_fritz7430
   DEVICE_MODEL := FRITZ!Box 7430
   KERNEL_SIZE := 4096k
   IMAGE_SIZE := 49152k
-  DEVICE_PACKAGES := kmod-ath9k kmod-owl-loader wpad-basic-wolfssl fritz-tffs-nand fritz-caldata
+  DEVICE_PACKAGES := kmod-ath9k kmod-owl-loader kmod-usb-dwc2 wpad-basic-wolfssl \
+	fritz-tffs-nand fritz-caldata
 endef
 TARGET_DEVICES += avm_fritz7430
 
 define Device/bt_homehub-v5a
   $(Device/dsa-migration)
   $(Device/NAND)
-  DEVICE_VENDOR := British Telecom
+  DEVICE_VENDOR := British Telecom (BT)
   DEVICE_MODEL := Home Hub 5
   DEVICE_VARIANT := Type A
   BOARD_NAME := BTHOMEHUBV5A

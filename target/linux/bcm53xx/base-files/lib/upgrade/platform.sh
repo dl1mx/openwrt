@@ -143,7 +143,9 @@ platform_other_check_image() {
 	echo "Found $BCM53XX_FW_FORMAT firmware for device $BCM53XX_FW_BOARD_ID"
 
 	local expected_image="$(platform_expected_image)"
-	[ -n "$expected_image" -a -n "$BCM53XX_FW_BOARD_ID" -a "$expected_image" != "$BCM53XX_FW_FORMAT $BCM53XX_FW_BOARD_ID" ] && {
+	local tmp_format=$BCM53XX_FW_FORMAT
+	[ "$tmp_format" = "lxlold" ] && tmp_format="lxl"
+	[ -n "$expected_image" -a -n "$BCM53XX_FW_BOARD_ID" -a "$expected_image" != "$tmp_format $BCM53XX_FW_BOARD_ID" ] && {
 		echo "Firmware doesn't match device ($expected_image)"
 		error=1
 	}
@@ -191,12 +193,16 @@ platform_other_check_image() {
 }
 
 platform_check_image() {
-	case "$(board_name)" in
+	local board
+
+	board="$(board_name)"
+	case "$board" in
+	# Ideally, REQUIRE_IMAGE_METADATA=1 would suffice
+	# but this would require converting all other
+	# devices too.
+	meraki,mr26 | \
 	meraki,mr32)
-		# Ideally, REQUIRE_IMAGE_METADATA=1 would suffice
-		# but this would require converting all other
-		# devices too.
-		nand_do_platform_check meraki-mr32 "$1"
+		nand_do_platform_check "${board//,/_}" "$1"
 		return $?
 		;;
 	*)
@@ -392,20 +398,13 @@ platform_other_do_upgrade() {
 
 platform_do_upgrade() {
 	case "$(board_name)" in
+	meraki,mr26 | \
 	meraki,mr32)
 		CI_KERNPART="part.safe"
 		nand_do_upgrade "$1"
 		;;
 	*)
 		platform_other_do_upgrade "$1"
-		;;
-	esac
-}
-
-platform_nand_pre_upgrade() {
-	case "$(board_name)" in
-	meraki,mr32)
-		CI_KERNPART="part.safe"
 		;;
 	esac
 }
